@@ -3,11 +3,33 @@ package routes
 import (
 	"azura-lab-intern/study-case-1/helpers"
 	"azura-lab-intern/study-case-1/repository"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
 )
 
+func GetAllProductByCategory(productRepo *repository.ProductRepository) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		category := r.URL.Query().Get("category")
+
+		if len(category) < 1 {
+			log.Println("error product by category : invalid category \"", category, "\"")
+			helpers.ErrorResponseJSON(w, fmt.Sprintf("error product by category : invalid category \"%s\"", category), http.StatusBadRequest)
+			return
+		}
+
+		results, err := productRepo.GetProductByCategory(category)
+
+		if err != nil {
+			log.Println("error product by category : ", err.Message)
+			helpers.ErrorResponseJSON(w, err.Message, http.StatusInternalServerError)
+			return
+		}
+
+		helpers.SuccessResponseJSON(w, "success getting product by category", results)
+	})
+}
 func GetAllProduct(productRepo *repository.ProductRepository) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		result, err := productRepo.GetAllProduct()

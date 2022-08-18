@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"azura-lab-intern/study-case-1/helpers"
 	"azura-lab-intern/study-case-1/models"
 	"database/sql"
 	"log"
@@ -16,6 +17,43 @@ func CreateProductRepostitory(db *sql.DB) *ProductRepository {
 	return &ProductRepository{
 		db: db,
 	}
+}
+
+func (pr *ProductRepository) GetProductByCategory(categoryName string) ([]helpers.ProductCategory, *pq.Error) {
+	sqlStatement := `
+	SELECT 
+		p.id, p.name, p.price, c.id, c.name
+		FROM 
+			product as p
+		INNER JOIN category as c
+			ON category.id = product.category_id 
+		WHERE category.name = ?;`
+
+	rows, err := pr.db.Query(sqlStatement, categoryName)
+
+	if err != nil {
+		err := err.(*pq.Error)
+		log.Println("error on get all product : ", err.Message)
+		return nil, err
+	}
+
+	var products []helpers.ProductCategory
+	for rows.Next() {
+		var p helpers.ProductCategory
+
+		err := rows.Scan(&p.ProductID, &p.ProductName, &p.ProductPrice, &p.CategoryID, &p.ProductName)
+
+		if err != nil {
+			err := err.(*pq.Error)
+			log.Println("error on get all product : ", err.Message)
+			return nil, err
+		}
+
+		products = append(products, p)
+	}
+
+	return products, nil
+
 }
 
 func (pr *ProductRepository) GetProductByID(id int) (*models.Product, *pq.Error) {
@@ -57,6 +95,7 @@ func (pr *ProductRepository) GetAllProduct() ([]models.Product, *pq.Error) {
 			return nil, err
 		}
 
+		products = append(products, p)
 	}
 
 	return products, nil
