@@ -11,8 +11,15 @@ type jsonResponse struct {
 	Data    interface{} `json:"data"`
 }
 
-func SuccessResponseJSON(w http.ResponseWriter, msg string, data interface{}) {
+type ProductCategory struct {
+	ProductID    int    `json:"product_id"`
+	ProductName  string `json:"product_name"`
+	ProductPrice int    `json:"product_price"`
+	CategoryID   int    `json:"category_id,omitempty"`
+	CategoryName int    `json:"category_name"`
+}
 
+func SuccessResponseJSON(w http.ResponseWriter, msg string, data interface{}) {
 	response := jsonResponse{Success: true, Message: msg, Data: data}
 	responseByte, _ := json.Marshal(response)
 	w.Header().Add("Content-Type", "application/json")
