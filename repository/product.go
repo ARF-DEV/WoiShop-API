@@ -18,6 +18,22 @@ func CreateProductRepostitory(db *sql.DB) *ProductRepository {
 	}
 }
 
+func (pr *ProductRepository) GetProductByID(id int) (*models.Product, *pq.Error) {
+
+	sqlStatement := `SELECT id, name, price FROM product WHERE id = ?`
+
+	row := pr.db.QueryRow(sqlStatement)
+
+	var product models.Product
+	err := row.Scan(&product.ID, &product.Name, &product.Price)
+	if err != nil {
+		err := err.(*pq.Error)
+		log.Println("error on get all product : ", err.Message)
+		return nil, err
+	}
+	return &product, nil
+}
+
 func (pr *ProductRepository) GetAllProduct() ([]models.Product, *pq.Error) {
 	sqlStatement := `SELECT id, name, price FROM product`
 
