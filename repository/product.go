@@ -13,7 +13,7 @@ type ProductRepository struct {
 	db *sql.DB
 }
 
-func CreateProductRepostitory(db *sql.DB) *ProductRepository {
+func CreateProductRepository(db *sql.DB) *ProductRepository {
 	return &ProductRepository{
 		db: db,
 	}
