@@ -12,11 +12,12 @@ type jsonResponse struct {
 }
 
 type ProductCategory struct {
-	ProductID    int    `json:"product_id"`
-	ProductName  string `json:"product_name"`
-	ProductPrice int    `json:"product_price"`
-	CategoryID   int    `json:"category_id,omitempty"`
-	CategoryName string `json:"category_name"`
+	ProductID          int    `json:"product_id"`
+	ProductName        string `json:"product_name"`
+	ProductPrice       int    `json:"product_price"`
+	ProductDescription string `json:"product_description,omitempty"`
+	CategoryID         int    `json:"category_id,omitempty"`
+	CategoryName       string `json:"category_name"`
 }
 
 func SuccessResponseJSON(w http.ResponseWriter, msg string, data interface{}) {
