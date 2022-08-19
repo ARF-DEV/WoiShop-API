@@ -26,8 +26,8 @@ func (pr *ProductRepository) GetProductByCategory(categoryName string) ([]helper
 		FROM 
 			product as p
 		INNER JOIN category as c
-			ON category.id = product.category_id 
-		WHERE category.name = ?;`
+			ON c.id = p.category_id 
+		WHERE c.name = $1;`
 
 	rows, err := pr.db.Query(sqlStatement, categoryName)
 
@@ -41,7 +41,7 @@ func (pr *ProductRepository) GetProductByCategory(categoryName string) ([]helper
 	for rows.Next() {
 		var p helpers.ProductCategory
 
-		err := rows.Scan(&p.ProductID, &p.ProductName, &p.ProductPrice, &p.CategoryID, &p.ProductName)
+		err := rows.Scan(&p.ProductID, &p.ProductName, &p.ProductPrice, &p.CategoryID, &p.CategoryName)
 
 		if err != nil {
 			err := err.(*pq.Error)
@@ -58,15 +58,15 @@ func (pr *ProductRepository) GetProductByCategory(categoryName string) ([]helper
 
 func (pr *ProductRepository) GetProductByID(id int) (*models.Product, *pq.Error) {
 
-	sqlStatement := `SELECT id, name, price FROM product WHERE id = ?`
+	sqlStatement := `SELECT id, name, price FROM product WHERE id = $1`
 
-	row := pr.db.QueryRow(sqlStatement)
+	row := pr.db.QueryRow(sqlStatement, id)
 
 	var product models.Product
 	err := row.Scan(&product.ID, &product.Name, &product.Price)
 	if err != nil {
 		err := err.(*pq.Error)
-		log.Println("error on get all product : ", err.Message)
+		log.Println("error on get product : ", err.Message)
 		return nil, err
 	}
 	return &product, nil
@@ -79,7 +79,7 @@ func (pr *ProductRepository) GetAllProduct() ([]models.Product, *pq.Error) {
 
 	if err != nil {
 		err := err.(*pq.Error)
-		log.Println("error on get all product : ", err.Message)
+		log.Println("error on get product : ", err.Message)
 		return nil, err
 	}
 
@@ -91,7 +91,7 @@ func (pr *ProductRepository) GetAllProduct() ([]models.Product, *pq.Error) {
 
 		if err != nil {
 			err := err.(*pq.Error)
-			log.Println("error on get all product : ", err.Message)
+			log.Println("error on get product : ", err.Message)
 			return nil, err
 		}
 

@@ -16,7 +16,7 @@ type ProductCategory struct {
 	ProductName  string `json:"product_name"`
 	ProductPrice int    `json:"product_price"`
 	CategoryID   int    `json:"category_id,omitempty"`
-	CategoryName int    `json:"category_name"`
+	CategoryName string `json:"category_name"`
 }
 
 func SuccessResponseJSON(w http.ResponseWriter, msg string, data interface{}) {
