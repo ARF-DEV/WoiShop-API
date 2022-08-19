@@ -39,7 +39,7 @@ func (pr *ProductRepository) GetProductByCategory(categoryName string) ([]helper
 	for rows.Next() {
 		var p helpers.ProductCategory
 
-		err := rows.Scan(&p.ProductID, &p.ProductName, &p.ProductPrice, &p.CategoryID, &p.ProductDescription)
+		err := rows.Scan(&p.ProductID, &p.ProductName, &p.ProductPrice, &p.CategoryID, &p.CategoryName)
 
 		if err != nil {
 
