@@ -10,7 +10,7 @@ func NewMux(categoryRepo *repository.CategoryRepository, productRepo *repository
 	m := http.NewServeMux()
 
 	m.Handle("/api/v1/products", routes.GetAllProduct(productRepo))
-	m.Handle("/api/v1/product/by/id", routes.GetProductByID(productRepo))
+	m.Handle("/api/v1/product", routes.GetProductByID(productRepo))
 	m.Handle("/api/v1/product/by/category", routes.GetAllProductByCategory(productRepo))
 	m.Handle("/api/v1/categories", routes.GetAllCategory(categoryRepo))
 
