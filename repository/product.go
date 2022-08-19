@@ -5,8 +5,6 @@ import (
 	"azura-lab-intern/study-case-1/models"
 	"database/sql"
 	"log"
-
-	"github.com/lib/pq"
 )
 
 type ProductRepository struct {
@@ -19,7 +17,7 @@ func CreateProductRepository(db *sql.DB) *ProductRepository {
 	}
 }
 
-func (pr *ProductRepository) GetProductByCategory(categoryName string) ([]helpers.ProductCategory, *pq.Error) {
+func (pr *ProductRepository) GetProductByCategory(categoryName string) ([]helpers.ProductCategory, error) {
 	sqlStatement := `
 	SELECT 
 		p.id, p.name, p.price, c.id, c.name
@@ -32,8 +30,8 @@ func (pr *ProductRepository) GetProductByCategory(categoryName string) ([]helper
 	rows, err := pr.db.Query(sqlStatement, categoryName)
 
 	if err != nil {
-		err := err.(*pq.Error)
-		log.Println("error on get all product : ", err.Message)
+
+		log.Println("error on get all product : ", err.Error())
 		return nil, err
 	}
 
@@ -41,11 +39,11 @@ func (pr *ProductRepository) GetProductByCategory(categoryName string) ([]helper
 	for rows.Next() {
 		var p helpers.ProductCategory
 
-		err := rows.Scan(&p.ProductID, &p.ProductName, &p.ProductPrice, &p.CategoryID, &p.CategoryName)
+		err := rows.Scan(&p.ProductID, &p.ProductName, &p.ProductPrice, &p.CategoryID, &p.ProductDescription)
 
 		if err != nil {
-			err := err.(*pq.Error)
-			log.Println("error on get all product : ", err.Message)
+
+			log.Println("error on get all product : ", err.Error())
 			return nil, err
 		}
 
@@ -56,30 +54,30 @@ func (pr *ProductRepository) GetProductByCategory(categoryName string) ([]helper
 
 }
 
-func (pr *ProductRepository) GetProductByID(id int) (*models.Product, *pq.Error) {
+func (pr *ProductRepository) GetProductByID(id int) (*models.Product, error) {
 
-	sqlStatement := `SELECT id, name, price FROM product WHERE id = $1`
+	sqlStatement := `SELECT id, name, price, description FROM product WHERE id = $1`
 
 	row := pr.db.QueryRow(sqlStatement, id)
 
 	var product models.Product
-	err := row.Scan(&product.ID, &product.Name, &product.Price)
+	err := row.Scan(&product.ID, &product.Name, &product.Price, &product.Description)
 	if err != nil {
-		err := err.(*pq.Error)
-		log.Println("error on get product : ", err.Message)
+
+		log.Println("error on get product : ", err.Error())
 		return nil, err
 	}
 	return &product, nil
 }
 
-func (pr *ProductRepository) GetAllProduct() ([]models.Product, *pq.Error) {
+func (pr *ProductRepository) GetAllProduct() ([]models.Product, error) {
 	sqlStatement := `SELECT id, name, price FROM product`
 
 	rows, err := pr.db.Query(sqlStatement)
 
 	if err != nil {
-		err := err.(*pq.Error)
-		log.Println("error on get product : ", err.Message)
+
+		log.Println("error on get product : ", err.Error())
 		return nil, err
 	}
 
@@ -90,8 +88,8 @@ func (pr *ProductRepository) GetAllProduct() ([]models.Product, *pq.Error) {
 		err := rows.Scan(&p.ID, &p.Name, &p.Price)
 
 		if err != nil {
-			err := err.(*pq.Error)
-			log.Println("error on get product : ", err.Message)
+
+			log.Println("error on get product : ", err.Error())
 			return nil, err
 		}
 

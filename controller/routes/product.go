@@ -22,8 +22,8 @@ func GetAllProductByCategory(productRepo *repository.ProductRepository) http.Han
 		results, err := productRepo.GetProductByCategory(category)
 
 		if err != nil {
-			log.Println("error product by category : ", err.Message)
-			helpers.ErrorResponseJSON(w, err.Message, http.StatusInternalServerError)
+			log.Println("error product by category : ", err.Error())
+			helpers.ErrorResponseJSON(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
@@ -35,7 +35,7 @@ func GetAllProduct(productRepo *repository.ProductRepository) http.Handler {
 		result, err := productRepo.GetAllProduct()
 
 		if err != nil {
-			helpers.ErrorResponseJSON(w, err.Message, http.StatusInternalServerError)
+			helpers.ErrorResponseJSON(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
@@ -53,11 +53,11 @@ func GetProductByID(productRepo *repository.ProductRepository) http.Handler {
 			return
 		}
 
-		result, res_err := productRepo.GetProductByID(id)
+		result, err := productRepo.GetProductByID(id)
 
-		if res_err != nil {
-			log.Println("Error product by id : ", res_err.Message)
-			helpers.ErrorResponseJSON(w, res_err.Message, http.StatusInternalServerError)
+		if err != nil {
+			log.Println("Error product by id : ", err.Error())
+			helpers.ErrorResponseJSON(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
