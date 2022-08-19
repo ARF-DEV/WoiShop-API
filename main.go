@@ -2,6 +2,7 @@ package main
 
 import (
 	"azura-lab-intern/study-case-1/controller"
+	"azura-lab-intern/study-case-1/helpers"
 	"azura-lab-intern/study-case-1/repository"
 	"database/sql"
 	"fmt"
@@ -36,6 +37,7 @@ func main() {
 	}
 	fmt.Println("Database Connected!")
 
+	helpers.InitDB(db)
 	productRepo := repository.CreateProductRepository(db)
 	categoryRepo := repository.CreateCategoryRepository(db)
 
