@@ -32,7 +32,7 @@ func ErrorResponseJSON(w http.ResponseWriter, msg string, statusCode int) {
 	response := jsonResponse{
 		Success: false,
 		Message: msg,
-		Data:    msg,
+		Data:    nil,
 	}
 
 	responseByte, _ := json.Marshal(response)
