@@ -3,7 +3,6 @@ package routes
 import (
 	"azura-lab-intern/study-case-1/helpers"
 	"azura-lab-intern/study-case-1/repository"
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -14,8 +13,8 @@ func GetAllProductByCategory(productRepo *repository.ProductRepository) http.Han
 		category := r.URL.Query().Get("category")
 
 		if len(category) < 1 {
-			log.Println("error product by category : invalid category \"", category, "\"")
-			helpers.ErrorResponseJSON(w, fmt.Sprintf("error product by category : invalid category \"%s\"", category), http.StatusBadRequest)
+			log.Println("error product by category : category query is not found")
+			helpers.ErrorResponseJSON(w, "error product by category : category query is not found", http.StatusBadRequest)
 			return
 		}
 
