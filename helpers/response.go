@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-type jsonResponse struct {
+type JsonResponse struct {
 	Success bool        `json:"success"`
 	Message string      `json:"message"`
 	Data    interface{} `json:"data"`
@@ -21,7 +21,7 @@ type ProductCategory struct {
 }
 
 func SuccessResponseJSON(w http.ResponseWriter, msg string, data interface{}) {
-	response := jsonResponse{Success: true, Message: msg, Data: data}
+	response := JsonResponse{Success: true, Message: msg, Data: data}
 	responseByte, _ := json.Marshal(response)
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
@@ -29,7 +29,7 @@ func SuccessResponseJSON(w http.ResponseWriter, msg string, data interface{}) {
 }
 
 func ErrorResponseJSON(w http.ResponseWriter, msg string, statusCode int) {
-	response := jsonResponse{
+	response := JsonResponse{
 		Success: false,
 		Message: msg,
 		Data:    nil,
