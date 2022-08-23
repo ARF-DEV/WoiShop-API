@@ -6,7 +6,14 @@ func InitDB(DB *sql.DB) {
 	sqlStatement := `
 		drop table IF EXISTS product;
 		drop table IF EXISTS category;
+		drop table IF EXISTS user_data;
 
+		create table IF NOT EXISTS user_data (
+			id serial PRIMARY KEY,
+			full_name VARCHAR(150) NOT NULL,
+			phone_num VARCHAR(13) NOT NULL,
+			referal_code VARCHAR(100)
+		);
 		create table IF NOT EXISTS category (
 			id serial PRIMARY KEY,
 			name VARCHAR(100) NOT NULL
@@ -20,7 +27,18 @@ func InitDB(DB *sql.DB) {
 			image_link VARCHAR(200),
 			FOREIGN KEY (category_id) REFERENCES category (id) on delete set null
 		);
-
+		
+		insert into user_data (full_name, phone_num, referal_code) values ('Ana Flory', '4534682284', null);
+		insert into user_data (full_name, phone_num, referal_code) values ('Kara-lynn Baldery', '8462570336', '87635ea660df687e828c19d1758dd221afe31926');
+		insert into user_data (full_name, phone_num, referal_code) values ('Emmett Merrison', '8773841585', null);
+		insert into user_data (full_name, phone_num, referal_code) values ('Ham Brisseau', '7314453664', null);
+		insert into user_data (full_name, phone_num, referal_code) values ('Tyson Topliss', '7418779082', '87635ea660df687e828c19d1758dd221afe31926');
+		insert into user_data (full_name, phone_num, referal_code) values ('Kerrie Pfaffel', '7742057303', '87635ea660df687e828c19d1758dd221afe31926');
+		insert into user_data (full_name, phone_num, referal_code) values ('Ira O'' Markey', '4296026734', '87635ea660df687e828c19d1758dd221afe31926');
+		insert into user_data (full_name, phone_num, referal_code) values ('Malissia Straffon', '9381643505', null);
+		insert into user_data (full_name, phone_num, referal_code) values ('Dorothea Pavey', '4366117790', null);
+		insert into user_data (full_name, phone_num, referal_code) values ('Janaya Jeffrey', '8799709020', null);
+		
 		insert into category (name)	values
 		('pakaian'),
 		('makanan'),
