@@ -17,6 +17,7 @@ func InitDB(DB *sql.DB) {
 			name VARCHAR(150) NOT NULL,
 			price INT NOT NULL,
 			description VARCHAR(500),
+			image_link VARCHAR(200),
 			FOREIGN KEY (category_id) REFERENCES category (id) on delete set null
 		);
 
