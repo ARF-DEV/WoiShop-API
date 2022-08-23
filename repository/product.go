@@ -20,7 +20,7 @@ func CreateProductRepository(db *sql.DB) *ProductRepository {
 func (pr *ProductRepository) GetProductByCategory(categoryName string) ([]helpers.ProductCategory, error) {
 	sqlStatement := `
 	SELECT 
-		p.id, p.name, p.price, c.id, c.name
+		p.id, p.name, p.price, p.image_link, c.id, c.name
 		FROM 
 			product as p
 		INNER JOIN category as c
@@ -39,7 +39,7 @@ func (pr *ProductRepository) GetProductByCategory(categoryName string) ([]helper
 	for rows.Next() {
 		var p helpers.ProductCategory
 
-		err := rows.Scan(&p.ProductID, &p.ProductName, &p.ProductPrice, &p.CategoryID, &p.CategoryName)
+		err := rows.Scan(&p.ProductID, &p.ProductName, &p.ProductPrice, &p.ProductImageLink, &p.CategoryID, &p.CategoryName)
 
 		if err != nil {
 
@@ -56,12 +56,12 @@ func (pr *ProductRepository) GetProductByCategory(categoryName string) ([]helper
 
 func (pr *ProductRepository) GetProductByID(id int) (*models.Product, error) {
 
-	sqlStatement := `SELECT id, name, price, description FROM product WHERE id = $1`
+	sqlStatement := `SELECT id, name, price, description, image_link FROM product WHERE id = $1`
 
 	row := pr.db.QueryRow(sqlStatement, id)
 
 	var product models.Product
-	err := row.Scan(&product.ID, &product.Name, &product.Price, &product.Description)
+	err := row.Scan(&product.ID, &product.Name, &product.Price, &product.Description, &product.ImageLink)
 	if err != nil {
 
 		log.Println("error on get product : ", err.Error())
@@ -71,7 +71,7 @@ func (pr *ProductRepository) GetProductByID(id int) (*models.Product, error) {
 }
 
 func (pr *ProductRepository) GetAllProduct() ([]models.Product, error) {
-	sqlStatement := `SELECT id, name, price FROM product`
+	sqlStatement := `SELECT id, name, price, image_link FROM product`
 
 	rows, err := pr.db.Query(sqlStatement)
 
@@ -85,7 +85,7 @@ func (pr *ProductRepository) GetAllProduct() ([]models.Product, error) {
 	for rows.Next() {
 		var p models.Product
 
-		err := rows.Scan(&p.ID, &p.Name, &p.Price)
+		err := rows.Scan(&p.ID, &p.Name, &p.Price, &p.ImageLink)
 
 		if err != nil {
 
