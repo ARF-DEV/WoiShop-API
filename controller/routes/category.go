@@ -3,6 +3,7 @@ package routes
 import (
 	"azura-lab-intern/study-case-1/helpers"
 	"azura-lab-intern/study-case-1/repository"
+	"log"
 	"net/http"
 )
 
@@ -11,7 +12,9 @@ func GetAllCategory(categoryRepo *repository.CategoryRepository) http.Handler {
 		results, err := categoryRepo.GetAllCategory()
 
 		if err != nil {
-			helpers.ErrorResponseJSON(w, err.Message, http.StatusInternalServerError)
+			log.Println("Error on Get All Category : ", err.Error())
+			helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
+			return
 		}
 
 		helpers.SuccessResponseJSON(w, "Success getting all category", results)
