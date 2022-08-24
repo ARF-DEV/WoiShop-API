@@ -4,7 +4,6 @@ import (
 	"azura-lab-intern/study-case-1/helpers"
 	"azura-lab-intern/study-case-1/models"
 	"database/sql"
-	"log"
 )
 
 type ProductRepository struct {
@@ -31,7 +30,6 @@ func (pr *ProductRepository) GetProductByCategory(categoryName string) ([]helper
 
 	if err != nil {
 
-		log.Println("error on get all product : ", err.Error())
 		return nil, err
 	}
 
@@ -43,7 +41,6 @@ func (pr *ProductRepository) GetProductByCategory(categoryName string) ([]helper
 
 		if err != nil {
 
-			log.Println("error on get all product : ", err.Error())
 			return nil, err
 		}
 
@@ -64,7 +61,6 @@ func (pr *ProductRepository) GetProductByID(id int) (*models.Product, error) {
 	err := row.Scan(&product.ID, &product.Name, &product.Price, &product.Description, &product.ImageLink)
 	if err != nil {
 
-		log.Println("error on get product : ", err.Error())
 		return nil, err
 	}
 	return &product, nil
@@ -77,7 +73,6 @@ func (pr *ProductRepository) GetAllProduct() ([]models.Product, error) {
 
 	if err != nil {
 
-		log.Println("error on get product : ", err.Error())
 		return nil, err
 	}
 
@@ -89,7 +84,6 @@ func (pr *ProductRepository) GetAllProduct() ([]models.Product, error) {
 
 		if err != nil {
 
-			log.Println("error on get product : ", err.Error())
 			return nil, err
 		}
 
