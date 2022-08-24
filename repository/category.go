@@ -3,9 +3,6 @@ package repository
 import (
 	"azura-lab-intern/study-case-1/models"
 	"database/sql"
-	"log"
-
-	"github.com/lib/pq"
 )
 
 type CategoryRepository struct {
@@ -18,15 +15,13 @@ func CreateCategoryRepository(db *sql.DB) *CategoryRepository {
 	}
 }
 
-func (cr *CategoryRepository) GetAllCategory() ([]models.Category, *pq.Error) {
+func (cr *CategoryRepository) GetAllCategory() ([]models.Category, error) {
 
 	sqlStatement := `SELECT id, name FROM category`
 
 	rows, err := cr.db.Query(sqlStatement)
 
 	if err != nil {
-		err := err.(*pq.Error)
-		log.Println("error on get all product : ", err.Message)
 		return nil, err
 	}
 
@@ -37,8 +32,6 @@ func (cr *CategoryRepository) GetAllCategory() ([]models.Category, *pq.Error) {
 		err := rows.Scan(&c.ID, &c.Name)
 
 		if err != nil {
-			err := err.(*pq.Error)
-			log.Println("error on get all product : ", err.Message)
 			return nil, err
 		}
 
