@@ -9,34 +9,40 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
+	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
-)
-
-const (
-	host     = "localhost"
-	port     = 5432
-	user     = "postgres"
-	password = "123456"
-	dbname   = "study_case_1"
 )
 
 func TestGetAllProduct(t *testing.T) {
 
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+	err := godotenv.Load("./../.env")
+
+	if err != nil {
+		assert.NoError(t, err, "Cannot load .env file")
+	}
+
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	dbname := os.Getenv("DB_NAME")
+
+	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
 
 	db, err := sql.Open("postgres", psqlInfo)
 
 	if err != nil {
-		panic(err)
+		assert.NoError(t, err, "Cannot open database")
 	}
 	defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
-		panic(err)
+		assert.NoError(t, err, "Cannot ping database")
 	}
 	fmt.Println("Database Connected!")
 
@@ -64,19 +70,31 @@ func TestGetAllProduct(t *testing.T) {
 }
 
 func TestGetProductByID(t *testing.T) {
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+	err := godotenv.Load("./../.env")
+
+	if err != nil {
+		assert.NoError(t, err, "Cannot load .env file")
+	}
+
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	dbname := os.Getenv("DB_NAME")
+
+	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
 
 	db, err := sql.Open("postgres", psqlInfo)
 
 	if err != nil {
-		panic(err)
+		assert.NoError(t, err, "Cannot open database")
 	}
 	defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
-		panic(err)
+		assert.NoError(t, err, "Cannot ping database")
 	}
 	fmt.Println("Database Connected!")
 
@@ -105,19 +123,31 @@ func TestGetProductByID(t *testing.T) {
 }
 
 func TestGetAllCategory(t *testing.T) {
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+	err := godotenv.Load("./../.env")
+
+	if err != nil {
+		assert.NoError(t, err, "Cannot load .env file")
+	}
+
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	dbname := os.Getenv("DB_NAME")
+
+	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
 
 	db, err := sql.Open("postgres", psqlInfo)
 
 	if err != nil {
-		panic(err)
+		assert.NoError(t, err, "Cannot open database")
 	}
 	defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
-		panic(err)
+		assert.NoError(t, err, "Cannot ping database")
 	}
 	fmt.Println("Database Connected!")
 
@@ -146,19 +176,31 @@ func TestGetAllCategory(t *testing.T) {
 }
 
 func TestGetAllProductByCategory(t *testing.T) {
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+	err := godotenv.Load("./../.env")
+
+	if err != nil {
+		assert.NoError(t, err, "Cannot load .env file")
+	}
+
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	dbname := os.Getenv("DB_NAME")
+
+	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
 
 	db, err := sql.Open("postgres", psqlInfo)
 
 	if err != nil {
-		panic(err)
+		assert.NoError(t, err, "Cannot open database")
 	}
 	defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
-		panic(err)
+		assert.NoError(t, err, "Cannot ping database")
 	}
 	fmt.Println("Database Connected!")
 
