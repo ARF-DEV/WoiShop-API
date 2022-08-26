@@ -51,8 +51,9 @@ func TestGetAllProduct(t *testing.T) {
 	helpers.InitDB(db)
 	productRepo := repository.CreateProductRepository(db)
 	categoryRepo := repository.CreateCategoryRepository(db)
+	userRepo := repository.CreateUserRepository(db)
 
-	mux := controller.NewRouter(categoryRepo, productRepo)
+	mux := controller.NewRouter(categoryRepo, productRepo, userRepo)
 
 	req := httptest.NewRequest("GET", "/api/v1/products", nil)
 	res := httptest.NewRecorder()
@@ -103,8 +104,9 @@ func TestGetProductByID(t *testing.T) {
 	helpers.InitDB(db)
 	productRepo := repository.CreateProductRepository(db)
 	categoryRepo := repository.CreateCategoryRepository(db)
+	userRepo := repository.CreateUserRepository(db)
 
-	mux := controller.NewRouter(categoryRepo, productRepo)
+	mux := controller.NewRouter(categoryRepo, productRepo, userRepo)
 
 	req := httptest.NewRequest("GET", "/api/v1/products/40", nil)
 	res := httptest.NewRecorder()
@@ -156,8 +158,9 @@ func TestGetAllCategory(t *testing.T) {
 	helpers.InitDB(db)
 	productRepo := repository.CreateProductRepository(db)
 	categoryRepo := repository.CreateCategoryRepository(db)
+	userRepo := repository.CreateUserRepository(db)
 
-	mux := controller.NewRouter(categoryRepo, productRepo)
+	mux := controller.NewRouter(categoryRepo, productRepo, userRepo)
 
 	req := httptest.NewRequest("GET", "/api/v1/categories", nil)
 	res := httptest.NewRecorder()
@@ -209,8 +212,9 @@ func TestGetAllProductByCategory(t *testing.T) {
 	helpers.InitDB(db)
 	productRepo := repository.CreateProductRepository(db)
 	categoryRepo := repository.CreateCategoryRepository(db)
+	userRepo := repository.CreateUserRepository(db)
 
-	mux := controller.NewRouter(categoryRepo, productRepo)
+	mux := controller.NewRouter(categoryRepo, productRepo, userRepo)
 
 	req := httptest.NewRequest("GET", "/api/v1/products?category=makanan", nil)
 	res := httptest.NewRecorder()
