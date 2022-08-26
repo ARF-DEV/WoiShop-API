@@ -12,6 +12,7 @@ func InitDB(DB *sql.DB) {
 			id serial PRIMARY KEY,
 			full_name VARCHAR(150) NOT NULL,
 			phone_num VARCHAR(13) NOT NULL,
+			email VARCHAR(100) NOT NULL,
 			referal_code VARCHAR(100)
 		);
 		create table IF NOT EXISTS category (
@@ -28,17 +29,18 @@ func InitDB(DB *sql.DB) {
 			FOREIGN KEY (category_id) REFERENCES category (id) on delete set null
 		);
 		
-		insert into user_data (full_name, phone_num, referal_code) values ('Ana Flory', '4534682284', null);
-		insert into user_data (full_name, phone_num, referal_code) values ('Kara-lynn Baldery', '8462570336', '87635ea660df687e828c19d1758dd221afe31926');
-		insert into user_data (full_name, phone_num, referal_code) values ('Emmett Merrison', '8773841585', null);
-		insert into user_data (full_name, phone_num, referal_code) values ('Ham Brisseau', '7314453664', null);
-		insert into user_data (full_name, phone_num, referal_code) values ('Tyson Topliss', '7418779082', '87635ea660df687e828c19d1758dd221afe31926');
-		insert into user_data (full_name, phone_num, referal_code) values ('Kerrie Pfaffel', '7742057303', '87635ea660df687e828c19d1758dd221afe31926');
-		insert into user_data (full_name, phone_num, referal_code) values ('Ira O'' Markey', '4296026734', '87635ea660df687e828c19d1758dd221afe31926');
-		insert into user_data (full_name, phone_num, referal_code) values ('Malissia Straffon', '9381643505', null);
-		insert into user_data (full_name, phone_num, referal_code) values ('Dorothea Pavey', '4366117790', null);
-		insert into user_data (full_name, phone_num, referal_code) values ('Janaya Jeffrey', '8799709020', null);
-		
+		insert into user_data (full_name, phone_num, referal_code, email) values ('Sig Wisdom', '4071675964', 6924, 'swisdom0@usatoday.com');
+		insert into user_data (full_name, phone_num, referal_code, email) values ('Ripley Yerlett', '5668163093', 1223, 'ryerlett1@com.com');
+		insert into user_data (full_name, phone_num, referal_code, email) values ('Tanner Woolner', '6969464843', 5316, 'twoolner2@stumbleupon.com');
+		insert into user_data (full_name, phone_num, referal_code, email) values ('Jim Gwyneth', '5874603472', 6060, 'jgwyneth3@ibm.com');
+		insert into user_data (full_name, phone_num, referal_code, email) values ('Darnell Friedman', '6284241088', 6101, 'dfriedman4@topsy.com');
+		insert into user_data (full_name, phone_num, referal_code, email) values ('Deni Flowers', '6695709987', 4641, 'dflowers5@adobe.com');
+		insert into user_data (full_name, phone_num, referal_code, email) values ('Leonard Matiasek', '5932811188', 7260, 'lmatiasek6@ibm.com');
+		insert into user_data (full_name, phone_num, referal_code, email) values ('Guinna Misson', '6846128141', 8938, 'gmisson7@sitemeter.com');
+		insert into user_data (full_name, phone_num, referal_code, email) values ('Atlanta Asmus', '6378349674', 2019, 'aasmus8@yahoo.co.jp');
+		insert into user_data (full_name, phone_num, referal_code, email) values ('Linus Hendrikse', '9016918269', 7174, 'lhendrikse9@google.ca');
+		insert into user_data (full_name, phone_num, referal_code, email) values ('Arief', '6285351411242', 4949, 'ariefuddinsatriadharma@gmail.com');
+			
 		insert into category (name)	values
 		('pakaian'),
 		('makanan'),

@@ -20,5 +20,6 @@ type User struct {
 	ID          int            `db:"id" json:"id"`
 	Name        string         `db:"full_name" json:"full_name"`
 	NoTelp      string         `db:"phone_num" json:"phone_num"`
+	Email       string         `db:"email" json:"email"`
 	ReferalCode sql.NullString `db:"referal_code" json:"referal_code"`
 }
