@@ -46,8 +46,8 @@ func main() {
 	productRepo := repository.CreateProductRepository(db)
 	categoryRepo := repository.CreateCategoryRepository(db)
 
-	mux := controller.NewMux(categoryRepo, productRepo)
+	r := controller.NewRouter(categoryRepo, productRepo)
 
 	log.Println("Listening in port 8000")
-	http.ListenAndServe(":8000", mux)
+	http.ListenAndServe(":8000", r)
 }

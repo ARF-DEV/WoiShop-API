@@ -7,9 +7,11 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/go-chi/chi/v5"
 )
 
-func GetAllProductByCategory(productRepo *repository.ProductRepository) http.Handler {
+func GetAllProductByCategory(productRepo *repository.ProductRepository) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		category := r.URL.Query().Get("category")
 
@@ -30,22 +32,39 @@ func GetAllProductByCategory(productRepo *repository.ProductRepository) http.Han
 		helpers.SuccessResponseJSON(w, "success getting product by category", results)
 	})
 }
-func GetAllProduct(productRepo *repository.ProductRepository) http.Handler {
+func GetAllProduct(productRepo *repository.ProductRepository) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		result, err := productRepo.GetAllProduct()
+		category := r.URL.Query().Get("category")
 
-		if err != nil && err != sql.ErrNoRows {
-			helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
-			return
+		if len(category) < 1 {
+
+			result, err := productRepo.GetAllProduct()
+
+			if err != nil && err != sql.ErrNoRows {
+				helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
+				return
+			}
+
+			helpers.SuccessResponseJSON(w, "Success getting all product", result)
+		} else {
+			results, err := productRepo.GetProductByCategory(category)
+
+			if err != nil {
+				log.Println("error product by category : ", err.Error())
+				helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
+				return
+			}
+
+			helpers.SuccessResponseJSON(w, "success getting product by category", results)
+
 		}
 
-		helpers.SuccessResponseJSON(w, "Success getting all product", result)
 	})
 }
 
-func GetProductByID(productRepo *repository.ProductRepository) http.Handler {
+func GetProductByID(productRepo *repository.ProductRepository) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		id := r.URL.Query().Get("id")
+		id := chi.URLParam(r, "id")
 
 		if len(id) < 1 {
 			log.Println("Error product by id : id query not found")
@@ -53,7 +72,7 @@ func GetProductByID(productRepo *repository.ProductRepository) http.Handler {
 			return
 		}
 
-		id_int, err := strconv.Atoi(r.URL.Query().Get("id"))
+		id_int, err := strconv.Atoi(id)
 
 		if err != nil {
 			log.Println("Error product by id : ", err.Error())

@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func GetAllCategory(categoryRepo *repository.CategoryRepository) http.Handler {
+func GetAllCategory(categoryRepo *repository.CategoryRepository) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		results, err := categoryRepo.GetAllCategory()
 

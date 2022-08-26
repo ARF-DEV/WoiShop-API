@@ -14,6 +14,8 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
+
+	_ "github.com/lib/pq"
 )
 
 func TestGetAllProduct(t *testing.T) {
@@ -50,7 +52,7 @@ func TestGetAllProduct(t *testing.T) {
 	productRepo := repository.CreateProductRepository(db)
 	categoryRepo := repository.CreateCategoryRepository(db)
 
-	mux := controller.NewMux(categoryRepo, productRepo)
+	mux := controller.NewRouter(categoryRepo, productRepo)
 
 	req := httptest.NewRequest("GET", "/api/v1/products", nil)
 	res := httptest.NewRecorder()
@@ -102,9 +104,9 @@ func TestGetProductByID(t *testing.T) {
 	productRepo := repository.CreateProductRepository(db)
 	categoryRepo := repository.CreateCategoryRepository(db)
 
-	mux := controller.NewMux(categoryRepo, productRepo)
+	mux := controller.NewRouter(categoryRepo, productRepo)
 
-	req := httptest.NewRequest("GET", "/api/v1/product?id=40", nil)
+	req := httptest.NewRequest("GET", "/api/v1/products/40", nil)
 	res := httptest.NewRecorder()
 	mux.ServeHTTP(res, req)
 
@@ -155,7 +157,7 @@ func TestGetAllCategory(t *testing.T) {
 	productRepo := repository.CreateProductRepository(db)
 	categoryRepo := repository.CreateCategoryRepository(db)
 
-	mux := controller.NewMux(categoryRepo, productRepo)
+	mux := controller.NewRouter(categoryRepo, productRepo)
 
 	req := httptest.NewRequest("GET", "/api/v1/categories", nil)
 	res := httptest.NewRecorder()
@@ -208,9 +210,9 @@ func TestGetAllProductByCategory(t *testing.T) {
 	productRepo := repository.CreateProductRepository(db)
 	categoryRepo := repository.CreateCategoryRepository(db)
 
-	mux := controller.NewMux(categoryRepo, productRepo)
+	mux := controller.NewRouter(categoryRepo, productRepo)
 
-	req := httptest.NewRequest("GET", "/api/v1/product/by/category?category=makanan", nil)
+	req := httptest.NewRequest("GET", "/api/v1/products?category=makanan", nil)
 	res := httptest.NewRecorder()
 	mux.ServeHTTP(res, req)
 
