@@ -4,6 +4,7 @@ import (
 	"azura-lab-intern/study-case-1/helpers"
 	"azura-lab-intern/study-case-1/repository"
 	"database/sql"
+	"errors"
 	"log"
 	"net/http"
 	"strconv"
@@ -25,6 +26,10 @@ func GetAllProductByCategory(productRepo *repository.ProductRepository) http.Han
 
 		if err != nil {
 			log.Println("error product by category : ", err.Error())
+			if errors.Is(err, sql.ErrNoRows) {
+				helpers.ErrorResponseJSON(w, "Not Found", http.StatusOK)
+				return
+			}
 			helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
 			return
 		}
@@ -40,7 +45,11 @@ func GetAllProduct(productRepo *repository.ProductRepository) http.HandlerFunc {
 
 			result, err := productRepo.GetAllProduct()
 
-			if err != nil && err != sql.ErrNoRows {
+			if err != nil {
+				if errors.Is(err, sql.ErrNoRows) {
+					helpers.ErrorResponseJSON(w, "Not Found", http.StatusOK)
+					return
+				}
 				helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
 				return
 			}
@@ -51,6 +60,10 @@ func GetAllProduct(productRepo *repository.ProductRepository) http.HandlerFunc {
 
 			if err != nil {
 				log.Println("error product by category : ", err.Error())
+				if errors.Is(err, sql.ErrNoRows) {
+					helpers.ErrorResponseJSON(w, "Not Found", http.StatusOK)
+					return
+				}
 				helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
 				return
 			}
@@ -82,8 +95,12 @@ func GetProductByID(productRepo *repository.ProductRepository) http.HandlerFunc 
 
 		result, err := productRepo.GetProductByID(id_int)
 
-		if err != nil && err != sql.ErrNoRows {
+		if err != nil {
 			log.Println("Error product by id : ", err.Error())
+			if errors.Is(err, sql.ErrNoRows) {
+				helpers.ErrorResponseJSON(w, "Not Found", http.StatusOK)
+				return
+			}
 			helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
 			return
 		}
