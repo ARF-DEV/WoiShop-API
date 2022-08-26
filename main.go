@@ -45,8 +45,9 @@ func main() {
 	helpers.InitDB(db)
 	productRepo := repository.CreateProductRepository(db)
 	categoryRepo := repository.CreateCategoryRepository(db)
+	userRepo := repository.CreateUserRepository(db)
 
-	r := controller.NewRouter(categoryRepo, productRepo)
+	r := controller.NewRouter(categoryRepo, productRepo, userRepo)
 
 	log.Println("Listening in port 8000")
 	http.ListenAndServe(":8000", r)
