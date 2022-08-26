@@ -31,7 +31,7 @@ func (u *UserRepository) InsertUser(user models.User) error {
 
 func (u *UserRepository) GetUserByNoTelp(noTelp string) (*models.User, error) {
 	sqlStatement := `
-	SELECT id, full_name, phone_num, email, referal_code FROM user_data WHERE phone_num = ?
+	SELECT id, full_name, phone_num, email, referal_code FROM user_data WHERE phone_num = $1
 	`
 
 	row := u.db.QueryRow(sqlStatement, noTelp)
@@ -50,7 +50,7 @@ func (u *UserRepository) GetUserByNoTelp(noTelp string) (*models.User, error) {
 func (u *UserRepository) GetUserByEmail(email string) (*models.User, error) {
 
 	sqlStatement := `
-	SELECT id, full_name, phone_num, email, referal_code FROM user_data WHERE email = ?
+	SELECT id, full_name, phone_num, email, referal_code FROM user_data WHERE email = $1
 	`
 
 	row := u.db.QueryRow(sqlStatement, email)
