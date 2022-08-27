@@ -17,9 +17,9 @@ func CreateUserRepository(db *sql.DB) *UserRepository {
 }
 
 func (u *UserRepository) InsertUser(user models.User) error {
-	sqlStatement := `INSERT (full_name, phone_num, referal_code) VALUES (?, ?, ?);`
+	sqlStatement := `INSERT INTO user_data (full_name, email, phone_num,  referal_code) VALUES ($1, $2, $3, $4);`
 
-	_, err := u.db.Exec(sqlStatement, user.Name, user.NoTelp, user.ReferalCode)
+	_, err := u.db.Exec(sqlStatement, user.Name, user.Email, user.NoTelp, user.ReferalCode)
 
 	if err != nil {
 		log.Println("Error on running sqlStatement: ", err.Error())
