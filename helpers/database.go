@@ -39,6 +39,7 @@ func InitDB(DB *sql.DB) {
 		insert into user_data (full_name, phone_num, referal_code, email) values ('Guinna Misson', '6846128141', 8938, 'gmisson7@sitemeter.com');
 		insert into user_data (full_name, phone_num, referal_code, email) values ('Atlanta Asmus', '6378349674', 2019, 'aasmus8@yahoo.co.jp');
 		insert into user_data (full_name, phone_num, referal_code, email) values ('Linus Hendrikse', '9016918269', 7174, 'lhendrikse9@google.ca');
+		insert into user_data (full_name, phone_num, referal_code, email) values ('Arief', '9016918269', 7174, 'popo@google.ca');
 			
 		insert into category (name)	values
 		('pakaian'),
