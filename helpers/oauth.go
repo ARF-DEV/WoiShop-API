@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 
 	"golang.org/x/oauth2"
@@ -30,6 +29,5 @@ func GetUserInfo(State string, Code string, OAuthStateString string, GoogleOAuth
 	if err != nil {
 		return nil, fmt.Errorf("failed reading response body: %s", err.Error())
 	}
-	log.Printf("%+v\n", token)
 	return contents, nil
 }
