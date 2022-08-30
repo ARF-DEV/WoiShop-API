@@ -14,8 +14,16 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
 
 	_ "github.com/lib/pq"
+)
+
+var (
+	GoogleAuthConfig  *oauth2.Config
+	OAuthStateString  string
+	GoogleRedirectURL string = "http://localhost:8000/api/v1/callback"
 )
 
 func TestGetAllProduct(t *testing.T) {
@@ -26,6 +34,14 @@ func TestGetAllProduct(t *testing.T) {
 		assert.NoError(t, err, "Cannot load .env file")
 	}
 
+	GoogleAuthConfig = &oauth2.Config{
+		RedirectURL:  GoogleRedirectURL,
+		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
+		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
+		Endpoint:     google.Endpoint,
+	}
+	OAuthStateString, _ = helpers.RandomString(10)
 	host := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
 	user := os.Getenv("DB_USER")
@@ -53,7 +69,7 @@ func TestGetAllProduct(t *testing.T) {
 	categoryRepo := repository.CreateCategoryRepository(db)
 	userRepo := repository.CreateUserRepository(db)
 
-	mux := controller.NewRouter(categoryRepo, productRepo, userRepo)
+	mux := controller.NewRouter(GoogleAuthConfig, OAuthStateString, categoryRepo, productRepo, userRepo)
 
 	req := httptest.NewRequest("GET", "/api/v1/products", nil)
 	res := httptest.NewRecorder()
@@ -79,6 +95,14 @@ func TestGetProductByID(t *testing.T) {
 		assert.NoError(t, err, "Cannot load .env file")
 	}
 
+	GoogleAuthConfig = &oauth2.Config{
+		RedirectURL:  GoogleRedirectURL,
+		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
+		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
+		Endpoint:     google.Endpoint,
+	}
+	OAuthStateString, _ = helpers.RandomString(10)
 	host := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
 	user := os.Getenv("DB_USER")
@@ -106,7 +130,7 @@ func TestGetProductByID(t *testing.T) {
 	categoryRepo := repository.CreateCategoryRepository(db)
 	userRepo := repository.CreateUserRepository(db)
 
-	mux := controller.NewRouter(categoryRepo, productRepo, userRepo)
+	mux := controller.NewRouter(GoogleAuthConfig, OAuthStateString, categoryRepo, productRepo, userRepo)
 
 	req := httptest.NewRequest("GET", "/api/v1/products/40", nil)
 	res := httptest.NewRecorder()
@@ -133,6 +157,14 @@ func TestGetAllCategory(t *testing.T) {
 		assert.NoError(t, err, "Cannot load .env file")
 	}
 
+	GoogleAuthConfig = &oauth2.Config{
+		RedirectURL:  GoogleRedirectURL,
+		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
+		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
+		Endpoint:     google.Endpoint,
+	}
+	OAuthStateString, _ = helpers.RandomString(10)
 	host := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
 	user := os.Getenv("DB_USER")
@@ -160,7 +192,7 @@ func TestGetAllCategory(t *testing.T) {
 	categoryRepo := repository.CreateCategoryRepository(db)
 	userRepo := repository.CreateUserRepository(db)
 
-	mux := controller.NewRouter(categoryRepo, productRepo, userRepo)
+	mux := controller.NewRouter(GoogleAuthConfig, OAuthStateString, categoryRepo, productRepo, userRepo)
 
 	req := httptest.NewRequest("GET", "/api/v1/categories", nil)
 	res := httptest.NewRecorder()
@@ -187,6 +219,14 @@ func TestGetAllProductByCategory(t *testing.T) {
 		assert.NoError(t, err, "Cannot load .env file")
 	}
 
+	GoogleAuthConfig = &oauth2.Config{
+		RedirectURL:  GoogleRedirectURL,
+		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
+		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
+		Endpoint:     google.Endpoint,
+	}
+	OAuthStateString, _ = helpers.RandomString(10)
 	host := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
 	user := os.Getenv("DB_USER")
@@ -214,7 +254,7 @@ func TestGetAllProductByCategory(t *testing.T) {
 	categoryRepo := repository.CreateCategoryRepository(db)
 	userRepo := repository.CreateUserRepository(db)
 
-	mux := controller.NewRouter(categoryRepo, productRepo, userRepo)
+	mux := controller.NewRouter(GoogleAuthConfig, OAuthStateString, categoryRepo, productRepo, userRepo)
 
 	req := httptest.NewRequest("GET", "/api/v1/products?category=makanan", nil)
 	res := httptest.NewRecorder()
