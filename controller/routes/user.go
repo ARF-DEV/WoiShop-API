@@ -21,10 +21,6 @@ type TokenBody struct {
 	Token string `json:"token"`
 }
 
-type OTPTokenBody struct {
-	Token string `json:"otp_token"`
-}
-
 func Login(userRepo *repository.UserRepository) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var u models.User
