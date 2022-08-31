@@ -26,11 +26,12 @@ func GetAllProductByCategory(productRepo *repository.ProductRepository) http.Han
 
 		if err != nil {
 			log.Println("error product by category : ", err.Error())
-			if errors.Is(err, sql.ErrNoRows) {
-				helpers.ErrorResponseJSON(w, "Not Found", http.StatusOK)
-				return
-			}
 			helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+
+		if len(results) < 1 {
+			helpers.ErrorResponseJSON(w, "Not Found", http.StatusOK)
 			return
 		}
 
@@ -60,14 +61,14 @@ func GetAllProduct(productRepo *repository.ProductRepository) http.HandlerFunc {
 
 			if err != nil {
 				log.Println("error product by category : ", err.Error())
-				if errors.Is(err, sql.ErrNoRows) {
-					helpers.ErrorResponseJSON(w, "Not Found", http.StatusOK)
-					return
-				}
 				helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
 				return
 			}
 
+			if len(results) < 1 {
+				helpers.ErrorResponseJSON(w, "Not Found", http.StatusOK)
+				return
+			}
 			helpers.SuccessResponseJSON(w, "success getting product by category", results)
 
 		}
