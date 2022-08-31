@@ -38,10 +38,15 @@ func Authorization(googleOAuthConfig *oauth2.Config) func(next http.Handler) htt
 			}
 
 			tokenString := strings.Replace(bearer, "Bearer ", "", -1)
-
 			if len(strings.Split(tokenString, ".")) != 3 {
 				response, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + tokenString)
 
+				if response.StatusCode == 401 {
+					log.Println("Invalid OAuth Token")
+					helpers.ErrorResponseJSON(w, "Invalid Token", http.StatusUnauthorized)
+					return
+
+				}
 				if err != nil {
 					log.Println("Error on requesting user info: ", err.Error())
 					helpers.ErrorResponseJSON(w, "Error on requesting user info: "+err.Error(), http.StatusUnauthorized)
@@ -57,7 +62,6 @@ func Authorization(googleOAuthConfig *oauth2.Config) func(next http.Handler) htt
 				}
 
 				log.Println(string(content))
-
 				ctx := context.WithValue(r.Context(), "user_oauth", content)
 				r = r.WithContext(ctx)
 
