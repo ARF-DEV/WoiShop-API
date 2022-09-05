@@ -30,7 +30,8 @@ func main() {
 
 	OAuthStateString, _ = helpers.RandomString(10)
 	db := config.ConfigDatabase()
-	helpers.InitDB(db)
+	defer db.Close()
+	helpers.MigrateDB(db)
 	productRepo := repository.CreateProductRepository(db)
 	categoryRepo := repository.CreateCategoryRepository(db)
 	userRepo := repository.CreateUserRepository(db)
