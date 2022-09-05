@@ -64,7 +64,7 @@ func TestGetAllProduct(t *testing.T) {
 	}
 	fmt.Println("Database Connected!")
 
-	helpers.InitDB(db)
+	helpers.MigrateDB(db)
 	productRepo := repository.CreateProductRepository(db)
 	categoryRepo := repository.CreateCategoryRepository(db)
 	userRepo := repository.CreateUserRepository(db)
@@ -125,7 +125,7 @@ func TestGetProductByID(t *testing.T) {
 	}
 	fmt.Println("Database Connected!")
 
-	helpers.InitDB(db)
+	helpers.MigrateDB(db)
 	productRepo := repository.CreateProductRepository(db)
 	categoryRepo := repository.CreateCategoryRepository(db)
 	userRepo := repository.CreateUserRepository(db)
@@ -187,7 +187,7 @@ func TestGetAllCategory(t *testing.T) {
 	}
 	fmt.Println("Database Connected!")
 
-	helpers.InitDB(db)
+	helpers.MigrateDB(db)
 	productRepo := repository.CreateProductRepository(db)
 	categoryRepo := repository.CreateCategoryRepository(db)
 	userRepo := repository.CreateUserRepository(db)
@@ -249,7 +249,7 @@ func TestGetAllProductByCategory(t *testing.T) {
 	}
 	fmt.Println("Database Connected!")
 
-	helpers.InitDB(db)
+	helpers.MigrateDB(db)
 	productRepo := repository.CreateProductRepository(db)
 	categoryRepo := repository.CreateCategoryRepository(db)
 	userRepo := repository.CreateUserRepository(db)
