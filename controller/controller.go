@@ -28,8 +28,8 @@ func (a *APIController) GetRouter() http.Handler {
 		r.Get("/api/v1/products", routes.GetAllProduct(a.ProductRepo))
 		r.Get("/api/v1/categories", routes.GetAllCategory(a.CategoryRepo))
 		r.Get("/api/v1/products/{id}", routes.GetProductByID(a.ProductRepo))
-		r.Get("/api/v1/carts/{id}", routes.GetCartByID(a.CartRepo, a.OrderRepo))
-		r.Get("/api/v1/carts", routes.GetAllCart(a.CartRepo, a.OrderRepo))
+		r.Get("/api/v1/carts/{id}", routes.GetCartByID(a.CartRepo, a.OrderRepo, a.ProductRepo))
+		r.Get("/api/v1/carts", routes.GetAllCart(a.CartRepo, a.OrderRepo, a.ProductRepo))
 	})
 	r.Group(func(r chi.Router) {
 		r.Get("/api/v1/login/oauth", routes.LoginOAuth(a.GoogleConfig, a.OAuthStateString))

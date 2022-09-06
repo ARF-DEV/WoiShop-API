@@ -11,12 +11,21 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-type CartResponseSchema struct {
-	models.Cart
-	Orders []models.Order `json:"orders"`
+type OrderResponseSchema struct {
+	models.Order
+	ProductName  string `json:"product_name"`
+	ProductPrice int    `json:"product_price"`
 }
 
-func GetCartByID(cartRepo *repository.CartRepository, orderRepo *repository.OrderRepository) http.HandlerFunc {
+type CartResponseSchema struct {
+	models.Cart
+	Orders []OrderResponseSchema `json:"orders"`
+}
+
+func GetCartByID(cartRepo *repository.CartRepository,
+	orderRepo *repository.OrderRepository,
+	productRepo *repository.ProductRepository) http.HandlerFunc {
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		id := chi.URLParam(r, "id")
 
@@ -48,10 +57,29 @@ func GetCartByID(cartRepo *repository.CartRepository, orderRepo *repository.Orde
 			helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
 			return
 		}
+		var orderList []OrderResponseSchema
+		for _, order := range orders {
+			var or OrderResponseSchema
+			product, err := productRepo.GetProductByID(order.ProductID)
+
+			if err != nil {
+				log.Println("Error While getting products : ", err.Error())
+				helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
+				return
+			}
+
+			or = OrderResponseSchema{
+				Order:        order,
+				ProductName:  product.Name,
+				ProductPrice: or.ProductPrice,
+			}
+
+			orderList = append(orderList, or)
+		}
 
 		res := CartResponseSchema{
 			Cart:   *cart,
-			Orders: orders,
+			Orders: orderList,
 		}
 
 		helpers.SuccessResponseJSON(w, "Success Getting Cart By ID", res)
@@ -59,7 +87,9 @@ func GetCartByID(cartRepo *repository.CartRepository, orderRepo *repository.Orde
 	})
 }
 
-func GetAllCart(cartRepo *repository.CartRepository, orderRepo *repository.OrderRepository) http.HandlerFunc {
+func GetAllCart(cartRepo *repository.CartRepository,
+	orderRepo *repository.OrderRepository,
+	productRepo *repository.ProductRepository) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		carts, err := cartRepo.GetAllCart()
 
@@ -81,9 +111,28 @@ func GetAllCart(cartRepo *repository.CartRepository, orderRepo *repository.Order
 				return
 			}
 
+			var orderList []OrderResponseSchema
+			for _, order := range orders {
+				var or OrderResponseSchema
+				product, err := productRepo.GetProductByID(order.ProductID)
+
+				if err != nil {
+					log.Println("Error While getting products : ", err.Error())
+					helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
+					return
+				}
+
+				or = OrderResponseSchema{
+					Order:        order,
+					ProductName:  product.Name,
+					ProductPrice: product.Price,
+				}
+
+				orderList = append(orderList, or)
+			}
 			cartRes = CartResponseSchema{
 				Cart:   carts[i],
-				Orders: orders,
+				Orders: orderList,
 			}
 
 			res = append(res, cartRes)
