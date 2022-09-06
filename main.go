@@ -35,8 +35,17 @@ func main() {
 	productRepo := repository.CreateProductRepository(db)
 	categoryRepo := repository.CreateCategoryRepository(db)
 	userRepo := repository.CreateUserRepository(db)
+	api := controller.APIController{
+		GoogleConfig:     GoogleAuthConfig,
+		OAuthStateString: OAuthStateString,
+		ProductRepo:      productRepo,
+		CategoryRepo:     categoryRepo,
+		UserRepo:         userRepo,
+		CartRepo:         repository.NewCartRepository(db),
+		OrderRepo:        repository.NewOrderRepository(db),
+	}
 
-	r := controller.NewRouter(GoogleAuthConfig, OAuthStateString, categoryRepo, productRepo, userRepo)
+	r := api.GetRouter()
 
 	log.Println("Listening in port 8000")
 	http.ListenAndServe(":8000", r)
