@@ -149,7 +149,7 @@ func VerifyOTPRegister(userRepo *repository.UserRepository) http.HandlerFunc {
 			return
 		}
 
-		err = userRepo.InsertUser(claims.UserData)
+		_, err = userRepo.InsertUser(claims.UserData)
 
 		if err != nil {
 			log.Println("Error while inserting user: ", err.Error())

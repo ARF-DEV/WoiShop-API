@@ -3,7 +3,6 @@ package repository
 import (
 	"azura-lab-intern/study-case-1/models"
 	"database/sql"
-	"log"
 )
 
 type UserRepository struct {
@@ -16,17 +15,20 @@ func CreateUserRepository(db *sql.DB) *UserRepository {
 	}
 }
 
-func (u *UserRepository) InsertUser(user models.User) error {
-	sqlStatement := `INSERT INTO user_data (full_name, email, phone_num,  referal_code) VALUES ($1, $2, $3, $4);`
+func (u *UserRepository) InsertUser(user models.User) (*models.User, error) {
+	sqlStatement := `
+	INSERT INTO user_data (full_name, email, phone_num,  referal_code) 
+	VALUES ($1, $2, $3, $4) 
+	RETURNING id, full_name, email, phone_num, referal_code;`
 
-	_, err := u.db.Exec(sqlStatement, user.Name, user.Email, user.NoTelp, user.ReferalCode)
+	var newUser models.User
+	err := u.db.QueryRow(sqlStatement, user.Name, user.Email, user.NoTelp, user.ReferalCode).Scan(&newUser.ID, &newUser.Name, &newUser.Email, &newUser.NoTelp, &newUser.ReferalCode)
 
 	if err != nil {
-		log.Println("Error on running sqlStatement: ", err.Error())
-		return err
+		return nil, err
 	}
 
-	return nil
+	return &newUser, nil
 }
 
 func (u *UserRepository) GetUserByNoTelp(noTelp string) (*models.User, error) {
@@ -40,7 +42,6 @@ func (u *UserRepository) GetUserByNoTelp(noTelp string) (*models.User, error) {
 	err := row.Scan(&user.ID, &user.Name, &user.NoTelp, &user.Email, &user.ReferalCode)
 
 	if err != nil {
-		log.Println("Error on Scan User By Telp: ", err.Error())
 		return nil, err
 	}
 
@@ -59,7 +60,6 @@ func (u *UserRepository) GetUserByEmail(email string) (*models.User, error) {
 	err := row.Scan(&user.ID, &user.Name, &user.NoTelp, &user.Email, &user.ReferalCode)
 
 	if err != nil {
-		log.Println("Error on Scan User By Telp: ", err.Error())
 		return nil, err
 	}
 
