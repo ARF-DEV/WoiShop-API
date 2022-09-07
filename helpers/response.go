@@ -9,7 +9,7 @@ import (
 type JsonResponse struct {
 	Success bool        `json:"success"`
 	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
+	Data    interface{} `json:"data,omitempty"`
 }
 
 type ProductCategory struct {
