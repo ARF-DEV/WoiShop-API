@@ -75,7 +75,7 @@ func GetCartByUserID(cartRepo *repository.CartRepository,
 			or = OrderResponseSchema{
 				Order:        order,
 				ProductName:  product.Name,
-				ProductPrice: or.ProductPrice,
+				ProductPrice: product.Price,
 			}
 
 			orderList = append(orderList, or)
@@ -238,5 +238,30 @@ func UpdateCart(cartRepo *repository.CartRepository) http.HandlerFunc {
 		}
 
 		helpers.SuccessResponseJSON(w, "Success Updating cart", updatedCart)
+	}
+}
+
+func UpdateOrder(orderRepo *repository.OrderRepository) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var orderBody models.Order
+
+		defer r.Body.Close()
+		err := json.NewDecoder(r.Body).Decode(&orderBody)
+
+		if err != nil {
+			log.Println("Error Decoding json : ", err.Error())
+			helpers.ErrorResponseJSON(w, "Json Body Is Invalid", http.StatusBadRequest)
+			return
+		}
+		log.Println(orderBody)
+		log.Println("HELLO")
+		updatedOrder, err := orderRepo.ChangeOrderAmount(orderBody.ID, orderBody.Amount)
+		if err != nil {
+			log.Println("Error while updating order: ", err.Error())
+			helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+
+		helpers.SuccessResponseJSON(w, "Success Updating cart", updatedOrder)
 	}
 }

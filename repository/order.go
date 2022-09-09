@@ -40,15 +40,17 @@ func (o *OrderRepository) GetOrderByCartID(CartID int) ([]models.Order, error) {
 	return orders, nil
 }
 
-func (c *OrderRepository) ChangeOrderAmount(orderID int, newAmount int) error {
-	sqlStatement := "UPDATE order_data SET amount = $1 WHERE id = $2;"
+func (c *OrderRepository) ChangeOrderAmount(orderID int, newAmount int) (*models.Order, error) {
+	sqlStatement := "UPDATE order_data SET amount = $1 WHERE id = $2 RETURNING id, cart_id, product_id, amount;"
 
-	_, err := c.db.Exec(sqlStatement, newAmount, orderID)
+	var updatedOrder models.Order
+	err := c.db.QueryRow(sqlStatement, newAmount, orderID).
+		Scan(&updatedOrder.ID, &updatedOrder.CartID, &updatedOrder.ProductID, &updatedOrder.Amount)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return &updatedOrder, nil
 }
 
 func (c *OrderRepository) CreateOrder(order models.Order) (*models.Order, error) {
