@@ -274,41 +274,6 @@ func DeleteCartByID(cartRepo *repository.CartRepository) http.HandlerFunc {
 	}
 }
 
-func AddOrderToCart(cartRepo *repository.CartRepository, orderRepo *repository.OrderRepository) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var OrderBody models.Order
-
-		err := json.NewDecoder(r.Body).Decode(&OrderBody)
-		if err != nil {
-			log.Println("Error while decoding json: ", err.Error())
-			helpers.ErrorResponseJSON(w, "Body is invalid", http.StatusBadRequest)
-			return
-		}
-
-		_, err = cartRepo.GetCartByID(OrderBody.CartID)
-
-		if err != nil {
-			if errors.Is(err, sql.ErrNoRows) {
-
-				helpers.ErrorResponseJSON(w, "Cart is not found, please create the cart first", http.StatusInternalServerError)
-				return
-			}
-			log.Println("Error while searching cart: ", err.Error())
-			helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
-			return
-		}
-
-		newOrder, err := orderRepo.CreateOrder(OrderBody)
-
-		if err != nil {
-			log.Println("Error creating order: ", err.Error())
-			helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
-			return
-		}
-		helpers.SuccessResponseJSON(w, "Success Creating Order", newOrder)
-	}
-}
-
 func UpdateCart(cartRepo *repository.CartRepository) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var cartBody models.Cart
