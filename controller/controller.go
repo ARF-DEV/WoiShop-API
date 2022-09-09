@@ -24,12 +24,14 @@ func (a *APIController) GetRouter() http.Handler {
 	r := chi.NewRouter()
 
 	r.Group(func(r chi.Router) {
-		r.Use(middleware.Authorization(a.GoogleConfig))
+		r.Use(middleware.Authorization(a.GoogleConfig, a.UserRepo))
 		r.Get("/api/v1/products", routes.GetAllProduct(a.ProductRepo))
-		r.Get("/api/v1/categories", routes.GetAllCategory(a.CategoryRepo))
 		r.Get("/api/v1/products/{id}", routes.GetProductByID(a.ProductRepo))
-		r.Get("/api/v1/carts/{id}", routes.GetCartByID(a.CartRepo, a.OrderRepo, a.ProductRepo))
 		r.Get("/api/v1/carts", routes.GetAllCart(a.CartRepo, a.OrderRepo, a.ProductRepo))
+		r.Delete("/api/v1/carts/{id}", routes.DeleteCartByID(*a.CartRepo))
+		r.Get("/api/v1/cart", routes.GetCartByUserID(a.CartRepo, a.OrderRepo, a.ProductRepo))
+		r.Post("/api/v1/cart/orders", routes.AddOrderToCart(a.CartRepo, a.OrderRepo))
+		r.Get("/api/v1/categories", routes.GetAllCategory(a.CategoryRepo))
 	})
 	r.Group(func(r chi.Router) {
 		r.Get("/api/v1/login/oauth", routes.LoginOAuth(a.GoogleConfig, a.OAuthStateString))
