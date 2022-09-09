@@ -147,7 +147,7 @@ func GetAllCart(cartRepo *repository.CartRepository,
 	})
 }
 
-func DeleteCartByID(cartRepo repository.CartRepository) http.HandlerFunc {
+func DeleteCartByID(cartRepo *repository.CartRepository) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := chi.URLParam(r, "id")
 		if len(id) < 1 {
@@ -263,5 +263,37 @@ func UpdateOrder(orderRepo *repository.OrderRepository) http.HandlerFunc {
 		}
 
 		helpers.SuccessResponseJSON(w, "Success Updating cart", updatedOrder)
+	}
+}
+
+func DeleteOrderByID(orderRepo *repository.OrderRepository) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := chi.URLParam(r, "id")
+		if len(id) < 1 {
+			log.Println("Error product by id : id query not found")
+			helpers.ErrorResponseJSON(w, "id query required", http.StatusBadRequest)
+			return
+		}
+		id_int, err := strconv.Atoi(id)
+
+		if err != nil {
+			log.Println("Error product by id : ", err.Error())
+			helpers.ErrorResponseJSON(w, "Invalid id query", http.StatusBadRequest)
+			return
+		}
+
+		deletedOrder, err := orderRepo.DeleteOrderByID(id_int)
+
+		if err != nil {
+			if errors.Is(err, sql.ErrNoRows) {
+				helpers.ErrorResponseJSON(w, "Order Not Found", http.StatusOK)
+				return
+			}
+			log.Println("Error when deleting order : ", err.Error())
+			helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+
+		helpers.SuccessResponseJSON(w, "Success to delete order", deletedOrder)
 	}
 }

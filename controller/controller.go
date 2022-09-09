@@ -29,11 +29,12 @@ func (a *APIController) GetRouter() http.Handler {
 		r.Get("/api/v1/products/{id}", routes.GetProductByID(a.ProductRepo))
 		r.Get("/api/v1/carts", routes.GetAllCart(a.CartRepo, a.OrderRepo, a.ProductRepo))
 		r.Put("/api/v1/carts", routes.UpdateCart(a.CartRepo))
-		r.Delete("/api/v1/carts/{id}", routes.DeleteCartByID(*a.CartRepo))
+		r.Delete("/api/v1/carts/{id}", routes.DeleteCartByID(a.CartRepo))
 		r.Get("/api/v1/cart", routes.GetCartByUserID(a.CartRepo, a.OrderRepo, a.ProductRepo))
 		r.Post("/api/v1/cart/orders", routes.AddOrderToCart(a.CartRepo, a.OrderRepo))
 		r.Get("/api/v1/categories", routes.GetAllCategory(a.CategoryRepo))
 		r.Put("/api/v1/orders", routes.UpdateOrder(a.OrderRepo))
+		r.Delete("/api/v1/orders", routes.DeleteOrderByID(a.OrderRepo))
 	})
 	r.Group(func(r chi.Router) {
 		r.Get("/api/v1/login/oauth", routes.LoginOAuth(a.GoogleConfig, a.OAuthStateString))
