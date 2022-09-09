@@ -91,19 +91,22 @@ func (c *CartRepository) AddCart(cart models.Cart) (*models.Cart, error) {
 	return &res, nil
 }
 
-func (c *CartRepository) UpdateCart(cart models.Cart) error {
+func (c *CartRepository) UpdateCart(cart models.Cart) (*models.Cart, error) {
 	sqlStatement := `
 	UPDATE cart
-	SET delivery_method_id = &1,
-	SET note = $2
-	WHERE id = $3;
-	`
+	SET delivery_method_id = $1, note = $2
+	WHERE id = $3
 
-	_, err := c.db.Exec(sqlStatement, cart.DeliveryMethodID, cart.Note, cart.ID)
+	RETURNING id, user_id, delivery_method_id, note`
+
+	var updatedRow models.Cart
+	err := c.db.QueryRow(sqlStatement, cart.DeliveryMethodID, cart.Note, cart.ID).
+		Scan(&updatedRow.ID, &updatedRow.UserID, &updatedRow.DeliveryMethodID, &updatedRow.Note)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return &updatedRow, nil
+
 }

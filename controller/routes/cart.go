@@ -216,3 +216,27 @@ func AddOrderToCart(cartRepo *repository.CartRepository, orderRepo *repository.O
 		helpers.SuccessResponseJSON(w, "Success Creating Order", newOrder)
 	}
 }
+
+func UpdateCart(cartRepo *repository.CartRepository) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var cartBody models.Cart
+
+		defer r.Body.Close()
+		err := json.NewDecoder(r.Body).Decode(&cartBody)
+
+		if err != nil {
+			log.Println("Error Decoding json : ", err.Error())
+			helpers.ErrorResponseJSON(w, "Json Body Is Invalid", http.StatusBadRequest)
+			return
+		}
+
+		updatedCart, err := cartRepo.UpdateCart(cartBody)
+		if err != nil {
+			log.Println("Error while updating cart: ", err.Error())
+			helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+
+		helpers.SuccessResponseJSON(w, "Success Updating cart", updatedCart)
+	}
+}
