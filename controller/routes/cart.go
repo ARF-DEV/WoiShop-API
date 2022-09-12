@@ -31,17 +31,23 @@ func GetCartByUserID(cartRepo *repository.CartRepository,
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		id := chi.URLParam(r, "id")
+		id := r.URL.Query().Get("user_id")
 		if len(id) < 1 {
-			log.Println("Error product by id : id query not found")
-			helpers.ErrorResponseJSON(w, "id query required", http.StatusBadRequest)
+			log.Println("Error product by user_id : user_id query not found")
+			helpers.ErrorResponseJSON(w, "user_id query required", http.StatusBadRequest)
 			return
 		}
 		id_int, err := strconv.Atoi(id)
+
+		if err != nil {
+			log.Println("Error product by user_id : user_id query should be a number")
+			helpers.ErrorResponseJSON(w, "user_id is not a number", http.StatusBadRequest)
+			return
+		}
 		cart, err := cartRepo.GetCartByUserID(id_int)
 		if err != nil {
 			if errors.Is(err, sql.ErrNoRows) {
-				helpers.ErrorResponseJSON(w, "Cart is not found, please create the cart first", http.StatusInternalServerError)
+				helpers.ErrorResponseJSON(w, "Cart is not found, please create the cart first", http.StatusOK)
 				return
 			}
 			log.Println("Error While getting Cart By ID : ", err.Error())
@@ -101,7 +107,7 @@ func GetCartByUserToken(cartRepo *repository.CartRepository,
 		cart, err := cartRepo.GetCartByUserID(userData.ID)
 		if err != nil {
 			if errors.Is(err, sql.ErrNoRows) {
-				helpers.ErrorResponseJSON(w, "Cart is not found, please create the cart first", http.StatusInternalServerError)
+				helpers.ErrorResponseJSON(w, "Cart is not found, please create the cart first", http.StatusOK)
 				return
 			}
 			log.Println("Error While getting Cart By ID : ", err.Error())

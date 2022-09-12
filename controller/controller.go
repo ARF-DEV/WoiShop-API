@@ -31,7 +31,7 @@ func (a *APIController) GetRouter() http.Handler {
 		r.Post("/api/v1/carts", routes.CreateCart(a.CartRepo))
 		r.Put("/api/v1/carts", routes.UpdateCart(a.CartRepo))
 		r.Delete("/api/v1/carts/{id}", routes.DeleteCartByID(a.CartRepo))
-		r.Get("/api/v1/carts/{id}", routes.GetCartByUserID(a.CartRepo, a.OrderRepo, a.ProductRepo))
+		r.Get("/api/v1/carts", routes.GetCartByUserID(a.CartRepo, a.OrderRepo, a.ProductRepo))
 		r.Get("/api/v1/user/cart", routes.GetCartByUserToken(a.CartRepo, a.OrderRepo, a.ProductRepo))
 		r.Post("/api/v1/user/cart", routes.CreateUserCart(a.CartRepo))
 		r.Get("/api/v1/categories", routes.GetAllCategory(a.CategoryRepo))
