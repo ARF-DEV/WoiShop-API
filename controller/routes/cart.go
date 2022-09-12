@@ -205,18 +205,27 @@ func GetAllCart(cartRepo *repository.CartRepository,
 func CreateUserCart(cartRepo *repository.CartRepository) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		user, _ := r.Context().Value("user_data").(models.User)
-		newCart, err := cartRepo.AddCart(models.Cart{
-			UserID:           user.ID,
-			DeliveryMethodID: 1,
-		})
 
-		if err != nil {
-			log.Println("Error while creating cart: ", err.Error())
-			helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
+		_, err := cartRepo.GetCartByUserID(user.ID)
+
+		if errors.Is(err, sql.ErrNoRows) {
+			newCart, err := cartRepo.AddCart(models.Cart{
+				UserID:           user.ID,
+				DeliveryMethodID: 1,
+			})
+
+			if err != nil {
+				log.Println("Error while creating cart: ", err.Error())
+				helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
+				return
+			}
+
+			helpers.SuccessResponseJSON(w, "Success Creating Cart", newCart)
 			return
 		}
 
-		helpers.SuccessResponseJSON(w, "Success Creating Cart", newCart)
+		log.Println("Error while creating cart: cart already exists")
+		helpers.ErrorResponseJSON(w, "cart already exists", http.StatusOK)
 	}
 }
 
@@ -232,14 +241,22 @@ func CreateCart(cartRepo *repository.CartRepository) http.HandlerFunc {
 			helpers.ErrorResponseJSON(w, "Json Body Is Invalid", http.StatusBadRequest)
 			return
 		}
-		createdCart, err := cartRepo.AddCart(cartBody)
-		if err != nil {
-			log.Println("Error while creating cart: ", err.Error())
-			helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
+
+		_, err = cartRepo.GetCartByUserID(cartBody.UserID)
+		if errors.Is(err, sql.ErrNoRows) {
+			createdCart, err := cartRepo.AddCart(cartBody)
+			if err != nil {
+				log.Println("Error while creating cart: ", err.Error())
+				helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
+				return
+			}
+
+			helpers.SuccessResponseJSON(w, "Success Creating Cart", createdCart)
 			return
 		}
 
-		helpers.SuccessResponseJSON(w, "Success Creating Cart", createdCart)
+		log.Println("Error while creating cart: cart already exists")
+		helpers.ErrorResponseJSON(w, "cart already exists", http.StatusOK)
 	}
 }
 func DeleteCartByID(cartRepo *repository.CartRepository) http.HandlerFunc {
