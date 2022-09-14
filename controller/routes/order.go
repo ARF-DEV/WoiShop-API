@@ -30,6 +30,12 @@ func UpdateOrder(orderRepo *repository.OrderRepository) http.HandlerFunc {
 		log.Println("HELLO")
 		updatedOrder, err := orderRepo.ChangeOrderAmount(orderBody.ID, orderBody.Amount)
 		if err != nil {
+			if errors.Is(err, sql.ErrNoRows) {
+
+				log.Println("Order Not found: ", err.Error())
+				helpers.ErrorResponseJSON(w, "Order Not Found", http.StatusOK)
+				return
+			}
 			log.Println("Error while updating order: ", err.Error())
 			helpers.ErrorResponseJSON(w, "Internal Server Error", http.StatusInternalServerError)
 			return

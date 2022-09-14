@@ -72,7 +72,7 @@ func (c *OrderRepository) DeleteOrderByID(id int) (*models.Order, error) {
 	sqlStatement := `DELETE FROM order_data WHERE id = $1 RETURNING id, cart_id, product_id, amount`
 
 	var deletedRow models.Order
-	err := c.db.QueryRow(sqlStatement, id).Scan(&deletedRow.ID, &deletedRow.CartID, deletedRow.ProductID, deletedRow.Amount)
+	err := c.db.QueryRow(sqlStatement, id).Scan(&deletedRow.ID, &deletedRow.CartID, &deletedRow.ProductID, &deletedRow.Amount)
 
 	if err != nil {
 		return nil, err

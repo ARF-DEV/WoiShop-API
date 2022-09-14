@@ -11,8 +11,8 @@ func MigrateCart(db *sql.DB) {
 		drop table IF EXISTS cart cascade;
 		create table IF NOT EXISTS cart (
 			id serial PRIMARY KEY,
-			user_id INT NOT NULL,
-			delivery_method_id INT NOT NULL,
+			user_id INT,
+			delivery_method_id INT,
 			note VARCHAR(200),
 			FOREIGN KEY (user_id) REFERENCES user_data (id) on delete set null,
 			FOREIGN KEY (delivery_method_id) REFERENCES delivery_method (id) on delete set null

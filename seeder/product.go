@@ -11,8 +11,8 @@ func MigrateProduct(db *sql.DB) {
 		drop table IF EXISTS product cascade;
 		CREATE TABLE IF NOT EXISTS product (
 			id serial PRIMARY KEY,
-			category_id INT NOT NULL,
-			store_id INT NOT NULL,
+			category_id INT,
+			store_id INT,
 			name VARCHAR(150) NOT NULL,
 			price INT NOT NULL,
 			stock INT NOT NULL,

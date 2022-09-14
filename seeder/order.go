@@ -9,8 +9,8 @@ func MigrateOrder(db *sql.DB) {
 		
 		create table IF NOT EXISTS order_data (
 			id serial PRIMARY KEY,
-			cart_id INT NOT NULL,
-			product_id INT NOT NULL,
+			cart_id INT,
+			product_id INT,
 			amount INT NOT NULL,
 			FOREIGN KEY (cart_id) REFERENCES cart (id) on delete set null,
 			FOREIGN KEY (product_id) REFERENCES product (id) on delete set null

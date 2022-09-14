@@ -36,7 +36,7 @@ func (a *APIController) GetRouter() http.Handler {
 		r.Post("/api/v1/user/cart", routes.CreateUserCart(a.CartRepo))
 		r.Get("/api/v1/categories", routes.GetAllCategory(a.CategoryRepo))
 		r.Put("/api/v1/orders", routes.UpdateOrder(a.OrderRepo))
-		r.Delete("/api/v1/orders", routes.DeleteOrderByID(a.OrderRepo))
+		r.Delete("/api/v1/orders/{id}", routes.DeleteOrderByID(a.OrderRepo))
 		r.Post("/api/v1/user/orders", routes.CreateOrder(a.CartRepo, a.OrderRepo))
 	})
 	r.Group(func(r chi.Router) {
