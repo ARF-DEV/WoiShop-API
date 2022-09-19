@@ -6,11 +6,11 @@ import (
 )
 
 func MigrateDB(DB *sql.DB) {
+	seeder.MigrateUser(DB)
 	seeder.MigrateCart(DB)
 	seeder.MigrateCategory(DB)
 	seeder.MigrateDeliveryMethod(DB)
 	seeder.MigrateOrder(DB)
 	seeder.MigrateProduct(DB)
 	seeder.MigrateStore(DB)
-	seeder.MigrateUser(DB)
 }
