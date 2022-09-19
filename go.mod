@@ -1,5 +1,6 @@
 module azura-lab-intern/study-case-1
 
+// +heroku goVersion go1.18
 go 1.18
 
 require (
