@@ -22,11 +22,8 @@ var (
 )
 
 func main() {
-	err := godotenv.Load()
+	godotenv.Load()
 
-	if err != nil {
-		panic(err.Error())
-	}
 	GoogleAuthConfig = &oauth2.Config{
 		RedirectURL:  "http://localhost:8000/api/v1/callback",
 		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
