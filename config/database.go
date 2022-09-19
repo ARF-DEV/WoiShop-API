@@ -10,11 +10,7 @@ import (
 
 func ConfigDatabase() *sql.DB {
 
-	err := godotenv.Load()
-
-	if err != nil {
-		panic(err.Error())
-	}
+	godotenv.Load()
 
 	host := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
