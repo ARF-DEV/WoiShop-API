@@ -58,6 +58,12 @@ func main() {
 
 	r := api.GetRouter()
 
+	PORT := os.Getenv("PORT")
+
+	if PORT == "" {
+		PORT = "8000"
+	}
+
 	log.Println("Listening in port 8000")
-	http.ListenAndServe(":8000", r)
+	http.ListenAndServe(":"+PORT, r)
 }
