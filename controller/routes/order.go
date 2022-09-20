@@ -92,7 +92,7 @@ func CreateOrder(cartRepo *repository.CartRepository, orderRepo *repository.Orde
 		if err != nil {
 			if errors.Is(err, sql.ErrNoRows) {
 
-				helpers.ErrorResponseJSON(w, "Cart is not found, please create the cart first", http.StatusInternalServerError)
+				helpers.ErrorResponseJSON(w, "Cart is not found, please create the cart first", http.StatusOK)
 				return
 			}
 			log.Println("Error while searching cart: ", err.Error())
