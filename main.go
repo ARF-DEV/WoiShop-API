@@ -23,9 +23,14 @@ var (
 
 func main() {
 	godotenv.Load()
+	RedirectURL := os.Getenv("OAUTH_REDIRECT_URL")
+	PORT := os.Getenv("PORT")
+	if PORT == "" {
+		PORT = "8000"
+	}
 
 	GoogleAuthConfig = &oauth2.Config{
-		RedirectURL:  "http://localhost:8000/api/v1/callback",
+		RedirectURL:  RedirectURL,
 		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
 		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
 		Scopes: []string{
@@ -54,12 +59,6 @@ func main() {
 	}
 
 	r := api.GetRouter()
-
-	PORT := os.Getenv("PORT")
-
-	if PORT == "" {
-		PORT = "8000"
-	}
 
 	log.Println("Listening in port 8000")
 	http.ListenAndServe(":"+PORT, r)
