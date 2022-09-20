@@ -25,7 +25,7 @@ type CartResponseSchema struct {
 	Orders []OrderResponseSchema `json:"orders"`
 }
 
-func GetCartByUserID(cartRepo *repository.CartRepository,
+func GetCarts(cartRepo *repository.CartRepository,
 	orderRepo *repository.OrderRepository,
 	productRepo *repository.ProductRepository) http.HandlerFunc {
 
@@ -33,8 +33,7 @@ func GetCartByUserID(cartRepo *repository.CartRepository,
 
 		id := r.URL.Query().Get("user_id")
 		if len(id) < 1 {
-			log.Println("Error product by user_id : user_id query not found")
-			helpers.ErrorResponseJSON(w, "user_id query required", http.StatusBadRequest)
+			GetAllCart(cartRepo, orderRepo, productRepo).ServeHTTP(w, r)
 			return
 		}
 		id_int, err := strconv.Atoi(id)
