@@ -17,6 +17,7 @@ func ConfigDatabase() *sql.DB {
 	user := os.Getenv("PGUSER")
 	password := os.Getenv("PGPASSWORD")
 	dbname := os.Getenv("PGDATABASE")
+	fmt.Println(host, port, user, password, dbname)
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=require",
 		host, port, user, password, dbname)
 
