@@ -61,5 +61,5 @@ func main() {
 	r := api.GetRouter()
 
 	log.Println("Listening in port 8000")
-	http.ListenAndServe("0.0.0.0:"+PORT, r)
+	http.ListenAndServe("8.8.8.8:"+PORT, r)
 }
