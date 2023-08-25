@@ -24,35 +24,17 @@ docker compose down --remove-orphans --volumes
 ```bash
 docker run --name pgsql-dev -rm -h localhost -e POSTGRES_PASSWORD=test -dp 5432:5432 postgres
 ```
-5. Run this command to access bash in postgres container:
-```bash
-docker exec -it pgsql-dev bash
-```
-6. Run this command to use psql:
-```bash
-psql -h localhost -U postgres
-```
-7. Run this command to initialize table:
-```SQL
-CREATE TABLE IF NOT EXISTS todos (
-    id SERIAL PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    complete_status BOOLEAN DEFAULT FALSE,
-    deadline DATE
-);
-```
-8. use `exit` to exit the psql and the bash.
-9. download modules using this command:
+5. use `exit` to exit the psql and the bash.
+6. download modules using this command:
 ```bash
 go mod download
 ```
-10. run the program using this command:
+7. run the program using this command:
 ```bash
 go run main.go
 ```
-11. To stop the program you can press `ctrl+c`
-12. To stop the database you can run this command:
+8. To stop the program you can press `ctrl+c`
+9. To stop the database you can run this command:
 ```bash
 docker rm -f pgsql-dev
 ```
