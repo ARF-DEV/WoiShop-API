@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -22,7 +21,7 @@ var (
 )
 
 func main() {
-	godotenv.Load()
+	// godotenv.Load()
 	RedirectURL := os.Getenv("OAUTH_REDIRECT_URL")
 	PORT := os.Getenv("PORT")
 	if PORT == "" {
@@ -60,6 +59,6 @@ func main() {
 
 	r := api.GetRouter()
 
-	log.Println("Listening in port 8000")
-	http.ListenAndServe("8.8.8.8:"+PORT, r)
+	log.Println("Listening in port ", PORT, "...")
+	http.ListenAndServe(":"+PORT, r)
 }

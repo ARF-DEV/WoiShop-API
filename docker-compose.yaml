@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  postgresDB:
+    image: postgres:15.4-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    container_name: postgresDB
+    hostname: postgresDB
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+      # - PGDATA=/var/lib/postgresql/data/pgdata
+      # - POSTGRES_HOST_AUTH_METHOD=trust
+    deploy:
+      restart_policy:
+        condition: on-failure
+    ports:
+      - 5432:5432
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  woishop:
+    build: .
+    container_name: woishop
+    hostname: woishop
+    depends_on:
+      postgresDB:
+        condition: service_healthy
+    environment:
+      - DB_HOST=postgresDB
+      - DB_PORT=5432
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - PORT=8000
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - OAUTH_REDIRECT_URL=${OAUTH_REDIRECT_URL}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - JWT_OTP_KEY=${JWT_OTP_KEY}
+      - SERVICE_EMAIL=${SERVICE_EMAIL}
+      - SERVICE_EMAIL_PASS=${SERVICE_EMAIL_PASS}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    deploy:
+      restart_policy:
+        condition: on-failure
+    ports:
+      - 8000:8000
+    networks:
+      - backend
+volumes:
+  postgres_data:
+
+networks:
+  backend:
+    driver: bridge
